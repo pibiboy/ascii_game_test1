@@ -58,10 +58,22 @@ class persona {
 
 public:
 	persona(int _x, int _y, int _hp);
+	int X() {
+		return x;
+	}
+	int Y() {
+		return y;
+	}
 	void imprimir();
 	void borrar();
 	void mover();
+	void animacion_derecha();
+	void animacion_izquierda();
+	void animacion_arriba();
 	void vida();
+	void daño() {
+		hp--;
+	}
 };
 
 //constructor
@@ -73,12 +85,17 @@ persona::persona(int _x, int _y, int _hp) {
 
 //dibuja a la persona
 void persona::imprimir() {
-	/*gotoxy(x, y);
-	cout << " ( )";
-	gotoxy(x, y + 1);
-	cout << "/ | \\";
-	gotoxy(x, y + 2);
-	cout << " / \\";*/
+	/* 
+	if (x >= p.X() && x <= p.X()+5 && y >= p.Y() && y <= p.Y()+3)
+	
+	X
+   Y0123456789
+	1.......|.0
+	2.(.)...|.1
+	3/.|.\.-|-2
+	4./.\.....3
+	
+	*/
 
 	gotoxy(x, y);
 	cout << "       |";
@@ -88,7 +105,6 @@ void persona::imprimir() {
 	cout << "/ | \\ -|-";
 	gotoxy(x, y + 3);
 	cout << " / \\";
-
 }
 
 
@@ -111,42 +127,15 @@ void persona::mover() {
 		borrar(); //		&& limites.
 		if (tecla == derecha && x + 3 < 118) { 
 			x++;
-			gotoxy(x, y);
-			cout << "       |";
-			gotoxy(x, y + 1);
-			cout << " ( )   |";
-			gotoxy(x, y + 2);
-			cout << "/ | \\ -|-";
-			gotoxy(x, y + 3);
-			cout << " /  \\";
-			Sleep(50);
-			borrar();
+			animacion_derecha();
 		}
 		if (tecla == izquierda && x > 1) { 
 			x--;
-			gotoxy(x, y);
-			cout << "       |";
-			gotoxy(x, y + 1);
-			cout << " ( )   |";
-			gotoxy(x, y + 2);
-			cout << "/ | \\ -|-";
-			gotoxy(x, y + 3);
-			cout << "/  \\";
-			Sleep(50);
-			borrar();
+			animacion_izquierda();
 		}
 		if (tecla == arriba && y > 1) { 
 			y--;
-			gotoxy(x, y);
-			cout << " ( )   |";
-			gotoxy(x, y + 1);
-			cout << "/ | \\  |";
-			gotoxy(x, y + 2);
-			cout << "      -|-";
-			gotoxy(x, y + 3);
-			cout << " / \\";
-			Sleep(50);
-			borrar();
+			animacion_arriba();
 		}
 		if (tecla == abajo && y + 3 < 29) { 
 			y++; 
@@ -155,13 +144,51 @@ void persona::mover() {
 	}
 }
 	
+void persona::animacion_derecha() {
+	gotoxy(x, y);
+	cout << "       |";
+	gotoxy(x, y + 1);
+	cout << " ( )   |";
+	gotoxy(x, y + 2);
+	cout << "/ | \\ -|-";
+	gotoxy(x, y + 3);
+	cout << " /  \\";
+	Sleep(50);
+	borrar();
+}
+
+void persona::animacion_izquierda() {
+	gotoxy(x, y);
+	cout << "       |";
+	gotoxy(x, y + 1);
+	cout << " ( )   |";
+	gotoxy(x, y + 2);
+	cout << "/ | \\ -|-";
+	gotoxy(x, y + 3);
+	cout << "/  \\";
+	Sleep(50);
+	borrar();
+}
+
+void persona::animacion_arriba() {
+	gotoxy(x, y);
+	cout << " ( )   |";
+	gotoxy(x, y + 1);
+	cout << "/ | \\  |";
+	gotoxy(x, y + 2);
+	cout << "      -|-";
+	gotoxy(x, y + 3);
+	cout << " / \\";
+	Sleep(50);
+	borrar();
+}
 
 //vida
 void persona::vida() {
 	gotoxy(1, 1);
 	cout << "HP:";
 	gotoxy(4,1);
-	cout << "  ";
+	cout << ' ';
 	for (int i = 0; i < hp; i++) {
 		gotoxy(4, 1);
 		cout << hp;
@@ -175,6 +202,7 @@ public:
 	enemigo(int _x, int _y);
 	void imprimir();
 	void mover();
+	void choque(class persona &p); //& para pasar datos por referencia y no sobrescribirlos
 };
 
 enemigo::enemigo(int _x, int _y){
@@ -192,10 +220,23 @@ void enemigo::mover() {
 	cout << ' ';
 	x--;
 	if (x < 1) {
-		y = rand() % 30;
-		x = 118;
+		y = rand() % 26;
+		x = 117;
 	}
 	imprimir();
+}
+
+void enemigo::choque(class persona &p) {
+	// x,y coordenada del enemigo.
+	// X,Y coordenada de la persona.
+	//if x esta entre X && y esta entre Y entonces:
+	if (x >= p.X() && x <= p.X()+5 && y > p.Y() && y <= p.Y()+3) {
+		p.daño(); //funcion que decrementa el hp.
+		p.imprimir();//funcion que imprime nuevamente la persona despues de ser borrada por el enemigo.
+		p.vida();//funcion para actualizar el hp de la persona.
+		y = rand() % 26;
+		x = 117;
+	}
 }
 
 // ================== juego ======================
@@ -212,7 +253,8 @@ int main() {
 	bool game_over = false;
 	while (!game_over)
 	{
-		e.mover();
+		//			cuando el enemigo choque con la persona esta recive daño.
+		e.mover(); e.choque(p);
 		p.mover();
 		Sleep(25);
 	}

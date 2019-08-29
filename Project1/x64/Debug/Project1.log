@@ -1,0 +1,8 @@
+﻿  game_test1.cpp
+C:\Users\P\Desktop\ascii_game_test1\Project1\game_test1.cpp(27,11): warning C4309:  'inicializando': truncamiento de valor constante
+C:\Users\P\Desktop\ascii_game_test1\Project1\game_test1.cpp(28,11): warning C4309:  'inicializando': truncamiento de valor constante
+C:\Users\P\Desktop\ascii_game_test1\Project1\game_test1.cpp(29,12): warning C4309:  'inicializando': truncamiento de valor constante
+C:\Users\P\Desktop\ascii_game_test1\Project1\game_test1.cpp(30,12): warning C4309:  'inicializando': truncamiento de valor constante
+C:\Users\P\Desktop\ascii_game_test1\Project1\game_test1.cpp(31,12): warning C4309:  'inicializando': truncamiento de valor constante
+C:\Users\P\Desktop\ascii_game_test1\Project1\game_test1.cpp(32,12): warning C4309:  'inicializando': truncamiento de valor constante
+  Project1.vcxproj -> C:\Users\P\Desktop\ascii_game_test1\x64\Debug\Project1.exe
